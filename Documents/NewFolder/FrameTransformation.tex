@@ -1,0 +1,113 @@
+\documentclass[12pt]{article}
+
+\usepackage{amsmath}
+\usepackage[left=1.2in,right=1in,top=.5in,bottom=.8in]{geometry}
+\usepackage{cancel}
+\usepackage{mathtools}
+
+\begin{document}
+	\title{Frame Transformation: Vehicle to Earth}
+	\author{K. E. Hammar}
+	\maketitle
+	Some of the terminology used in this document may be used incorrectly as the author is not 100\text{\%} certain of what she is doing, quite yet. \\
+	\section{Introduction}
+		The following information is meant to illustrate the process of computing the reference frame transformation, from vehicle (V) frame to earth (E) frame, of a two-wheel ground vehicle moving on the ground plane (D = 0). This is done through a series of equations to be enumerated in Section 3.\\
+	\section{Variables}
+		\begin{table}[hbt]
+			\begin{center}
+				\begin{tabular}{|c|c|c|}
+					\hline
+					Symbol & Units & Description \\ \hline
+					$e_L$ & $pulse$ & pulses of left wheel encoder\\
+					$e_R$ & $pulse$ & pulses of right wheel encoder\\
+					$T$ & $s$ & time step size\\
+					$E_L$ & $\frac{pulse}{s}$ & pulses of left wheel encoder over the time step \\
+					$E_R$ & $\frac{pulse}{s}$ & pulses of right wheel encoder over the time step \\
+					$\omega_L$ & $\frac{rad}{s}$ &rate of rotation of left wheel \\
+					$\omega_R$ & $\frac{rad}{s}$ & rate of rotation of right wheel \\
+					$v_L$ & $\frac{m}{s}$ & velocity of left wheel \\
+					$v_R$ & $\frac{m}{s}$ & velocity of right wheel \\
+					$u_v$ & $\frac{m}{s}$ & velocity of vehicle \\
+					$\omega_v$ & $\frac{rad}{s}$ & rate of rotation of vehicle \\
+					$R_L$ & $m$ & radius of left wheel\\
+					$R_R$ & $m$ & radius of right wheel\\
+					$L$ & $m$ & length of vehicle axle\\
+					$\psi_v$ & $rad$ & yaw angle of vehicle\\
+					$\dot{\psi}_v$ & $\frac{rad}{s}$ & rate of rotation of vehicle \\ 
+					$T_{EV}$ & $m$ & position vector from origin of E-frame to origin of V-frame\\
+					$\dot{T}_{EV}$ & $\frac{m}{s}$ & velocity vector of vehicle in E-frame 
+				\\ \hline
+			\end{tabular}
+			\end{center}
+		\end{table}
+	\section{Equations}
+		\begin{eqnarray}
+		\omega_L &=& \frac{2\pi}{N} E_L\\
+		\omega_R &=& \frac{2\pi}{N} E_R\\
+		v_L &=& R_L\cdot\omega_L\\
+		v_R &=& R_R\cdot\omega_R\\
+		u_v &=& \frac{v_L + v_R}{2}\\
+		\omega_v &=& \frac{1}{L}(v_L - v_R)\\
+		\dot{\psi}_v &=& \omega_v\\
+		\dot{T}_{EV} &=& 
+		\left[
+		\begin{array}{c}
+		\cos \psi_k\\
+		\sin \psi_k \\
+		0
+		\end{array}
+		\right] u_v\\
+		E_L &=& \frac{e_L}{T}\\
+		E_R &=& \frac{e_R}{T}
+	\end{eqnarray}
+	Using the equations above as a foundation, we can progress to the first step of the transformation process. We need to find $\psi_k$ and ${T}_{EV}$, we will do this using Euler's Method.
+	\begin{eqnarray}
+	\psi_k &=& \psi_{k-1} + \omega_v\cdot T \nonumber\\
+	&=& \psi_{k-1} + \frac{1}{L}(v_L - v_R)\cdot T \nonumber\\
+	&=& \psi_{k-1} + \frac{1}{L}(R_L\cdot\omega_L - R_R\cdot\omega_R)\cdot T \nonumber\\
+	&=& \psi_{k-1} + \frac{1}{L}\left(R_L\left(\frac{2\pi}{N} E_L\right) - R_R\left(\frac{2\pi}{N} E_R\right)\right)\cdot T \nonumber\\
+	&=& \psi_{k-1} + \frac{1}{L}\left(R_L\left(\frac{2\pi}{N} \cdot \frac{e_L}{\cancel{T}}\right) - R_R\left(\frac{2\pi}{N} \cdot  \frac{e_R}{\cancel{T}}\right)\right)\cdot \cancel{T} \nonumber\\
+	&=& \psi_{k-1} + \frac{1}{L}\left(R_L\left(\frac{2\pi \cdot e_L}{N}\right) - R_R \left(\frac{2\pi \cdot e_R}{N}\right)\right) \nonumber \\
+	&=& \psi_{k-1} + \frac{2\pi}{N \cdot L}(R_L \cdot e_L - R_R \cdot e_R)\\
+	\nonumber \end{eqnarray}
+	We have now found $\psi_k$ in terms of only estimable and known values: a previous yaw angle ($\psi_{k-1}$), the pulse value of both encoders ($e_{L,R}$), the radius of both wheels ($R_{L,R}$) and the length of the axle ($L$). Using (1)-(5) and (8)-(10) we will complete the same process for ${T}_{EV}(k)$, the position vector.\\
+	\begin{eqnarray}
+	{T}_{EV}(k) &=& {T}_{EV}(k-1) + \left[
+	\begin{array}{c}
+	\cos \psi_k\\
+	\sin \psi_k \\
+	0
+	\end{array}
+	\right] u_v \cdot T \nonumber \\
+	&=& {T}_{EV}(k-1) + \left[
+	\begin{array}{c}
+	\cos \psi_k\\
+	\sin \psi_k \\
+	0
+	\end{array}
+	\right] \left( \frac{v_L + v_R}{2} \right) \cdot T \nonumber \\
+	&=& {T}_{EV}(k-1) + \left[
+	\begin{array}{c}
+	\cos \psi_k\\
+	\sin \psi_k \\
+	0
+	\end{array}
+	\right] \frac{1}{2}(R_L\cdot\omega_L + R_R\cdot\omega_R)\cdot T \nonumber \nonumber \\
+	&& \text{As seen in the derivation of $\psi_k$ this can be simplified to:}	\nonumber \\
+	&=& {T}_{EV}(k-1) + \left[
+	\begin{array}{c}
+	\cos \psi_k\\
+	\sin \psi_k \\
+	0
+	\end{array}
+	\right] \frac{1}{2}\left(R_L\left(\frac{2\pi \cdot e_L}{N}\right) + R_R\left(\frac{2\pi \cdot e_R}{N}\right)\right) \nonumber  \\
+	&=& {T}_{EV}(k-1) + \left[
+	\begin{array}{c}
+	\cos \psi_k\\
+	\sin \psi_k \\
+	0
+	\end{array}
+	\right] \frac{\pi}{N}(R_L\cdot e_L + R_R\cdot e_R) \\
+	\nonumber \end{eqnarray}
+	 
+\end{document}
