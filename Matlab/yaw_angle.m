@@ -1,7 +1,7 @@
 function psi_k = yaw_angle(e, L, N, R)
-    Z = length(e)-1;
+    Z = length(e);
     psi_k = zeros(Z, 1);
-    for i = 1:Z
-        psi_k(i+1)= psi_k(i) + (2*pi*R/(N*L))*(e(i,1) - e(i,2));
+    for k = 2:Z
+        psi_k(k)= psi_k(k-1) + (2*pi*R/(N*L))*(e(k-1,1) - e(k-1,2));
     end
 end
