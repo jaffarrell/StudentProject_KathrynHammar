@@ -9,9 +9,9 @@
 	\title{Frame Transformation: Vehicle to Earth}
 	\author{K. E. Hammar}
 	\maketitle
-	Some of the terminology used in this document may be used incorrectly as the author is not 100\text{\%} certain of what she is doing, quite yet. \\
+	Some of the terminology used in this document may be used incorrectly as the author is not 100\text{\%} certain of what she is doing, quite yet. 
 	\section{Introduction}
-		The following information is meant to illustrate the process of computing the reference frame transformation, from vehicle (V) frame to earth (E) frame, of a two-wheel ground vehicle moving on the ground plane (D = 0). This is done through a series of equations to be enumerated in Section 3.\\
+		The following information is meant to illustrate the process of computing the reference frame transformation, from vehicle (V) frame to earth (E) frame, of a two-wheel ground vehicle moving on the ground plane (D = 0). This is done through a series of equations to be enumerated in Section 3.
 	\section{Variables}
 		\begin{table}[hbt]
 			\begin{center}
@@ -52,8 +52,8 @@
 		\dot{T}_{EV} &=& 
 		\left[
 		\begin{array}{c}
-		\cos \psi_k\\
-		\sin \psi_k \\
+		\cos \psi_v\\
+		\sin \psi_v \\
 		0
 		\end{array}
 		\right] u_v\\
@@ -62,49 +62,49 @@
 	\end{eqnarray}
 	Using the equations above as a foundation, we can progress to the first step of the transformation process. We need to find $\psi_k$ and ${T}_{EV}$, we will do this using Euler's Method.
 	\begin{eqnarray}
-	\psi_k &=& \psi_{k-1} + \omega_v\cdot T \nonumber\\
-	&=& \psi_{k-1} + \frac{1}{L}(v_L - v_R)\cdot T \nonumber\\
-	&=& \psi_{k-1} + \frac{1}{L}(R_L\cdot\omega_L - R_R\cdot\omega_R)\cdot T \nonumber\\
-	&=& \psi_{k-1} + \frac{1}{L}\left(R_L\left(\frac{2\pi}{N} E_L\right) - R_R\left(\frac{2\pi}{N} E_R\right)\right)\cdot T \nonumber\\
-	&=& \psi_{k-1} + \frac{1}{L}\left(R_L\left(\frac{2\pi}{N} \cdot \frac{e_L}{\cancel{T}}\right) - R_R\left(\frac{2\pi}{N} \cdot  \frac{e_R}{\cancel{T}}\right)\right)\cdot \cancel{T} \nonumber\\
-	&=& \psi_{k-1} + \frac{1}{L}\left(R_L\left(\frac{2\pi \cdot e_L}{N}\right) - R_R \left(\frac{2\pi \cdot e_R}{N}\right)\right) \nonumber \\
-	&=& \psi_{k-1} + \frac{2\pi}{N \cdot L}(R_L \cdot e_L - R_R \cdot e_R)\\
+	\psi_v(k) &=& \psi_v(k-1) + \omega_v\cdot T \nonumber\\
+	&=& \psi_v(k-1) + \frac{1}{L}(v_L - v_R)\cdot T \nonumber\\
+	&=& \psi_v(k-1) + \frac{1}{L}(R_L\cdot\omega_L - R_R\cdot\omega_R)\cdot T \nonumber\\
+	&=& \psi_v(k-1) + \frac{1}{L}\left(R_L\left(\frac{2\pi}{N} E_L\right) - R_R\left(\frac{2\pi}{N} E_R\right)\right)\cdot T \nonumber\\
+	&=& \psi_v(k-1) + \frac{1}{L}\left(R_L\left(\frac{2\pi}{N} \cdot \frac{e_L}{\cancel{T}}\right) - R_R\left(\frac{2\pi}{N} \cdot  \frac{e_R}{\cancel{T}}\right)\right)\cdot \cancel{T} \nonumber\\
+	&=& \psi_v(k-1) + \frac{1}{L}\left(R_L\left(\frac{2\pi \cdot e_L}{N}\right) - R_R \left(\frac{2\pi \cdot e_R}{N}\right)\right) \nonumber \\
+	&=& \psi_v(k-1) + \frac{2\pi}{N \cdot L}(R_L \cdot e_L - R_R \cdot e_R)\\
 	\nonumber \end{eqnarray}
-	We have now found $\psi_k$ in terms of only estimable and known values: a previous yaw angle ($\psi_{k-1}$), the pulse value of both encoders ($e_{L,R}$), the radius of both wheels ($R_{L,R}$) and the length of the axle ($L$). Using (1)-(5) and (8)-(10) we will complete the same process for ${T}_{EV}(k)$, the position vector.\\
+	We have now found $\psi_v$ in terms of only estimable and known values: a previous yaw angle ($\psi_v(k-1)$), the pulse value of both encoders ($e_{L,R}$), the radius of both wheels ($R_{L,R}$) and the length of the axle ($L$). Using (1)-(5) and (8)-(10) we will complete the same process for ${T}_{EV}(k)$, the position vector.\\
 	\begin{eqnarray}
 	{T}_{EV}(k) &=& {T}_{EV}(k-1) + \left[
 	\begin{array}{c}
-	\cos \psi_k\\
-	\sin \psi_k \\
+	\cos \psi_v\\
+	\sin \psi_v \\
 	0
 	\end{array}
 	\right] u_v \cdot T \nonumber \\
 	&=& {T}_{EV}(k-1) + \left[
 	\begin{array}{c}
-	\cos \psi_k\\
-	\sin \psi_k \\
+	\cos \psi_v\\
+	\sin \psi_v \\
 	0
 	\end{array}
 	\right] \left( \frac{v_L + v_R}{2} \right) \cdot T \nonumber \\
 	&=& {T}_{EV}(k-1) + \left[
 	\begin{array}{c}
-	\cos \psi_k\\
-	\sin \psi_k \\
+	\cos \psi_v\\
+	\sin \psi_v \\
 	0
 	\end{array}
 	\right] \frac{1}{2}(R_L\cdot\omega_L + R_R\cdot\omega_R)\cdot T \nonumber \nonumber \\
-	&& \text{As seen in the derivation of $\psi_k$ this can be simplified to:}	\nonumber \\
+	&& \text{As seen in the derivation of $\psi_v$ this can be simplified to:}	\nonumber \\
 	&=& {T}_{EV}(k-1) + \left[
 	\begin{array}{c}
-	\cos \psi_k\\
-	\sin \psi_k \\
+	\cos \psi_v\\
+	\sin \psi_v \\
 	0
 	\end{array}
 	\right] \frac{1}{2}\left(R_L\left(\frac{2\pi \cdot e_L}{N}\right) + R_R\left(\frac{2\pi \cdot e_R}{N}\right)\right) \nonumber  \\
 	&=& {T}_{EV}(k-1) + \left[
 	\begin{array}{c}
-	\cos \psi_k\\
-	\sin \psi_k \\
+	\cos \psi_v\\
+	\sin \psi_v \\
 	0
 	\end{array}
 	\right] \frac{\pi}{N}(R_L\cdot e_L + R_R\cdot e_R) \\
