@@ -1,4 +1,3 @@
-clear all;
 load('EncoderSim\encoder.mat');
 T = 1;
 omega_L = (2*pi/N)*e(:, 1)/T;  
