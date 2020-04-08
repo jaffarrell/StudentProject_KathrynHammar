@@ -109,5 +109,99 @@
 	\end{array}
 	\right] \frac{\pi}{N}(R_L\cdot e_L + R_R\cdot e_R) \\
 	\nonumber \end{eqnarray}
+	
+	\section{State Space}
+	
+	\begin{eqnarray}
+	\text{State Vector:}&& \nonumber\\
+	x &=& \left[
+	\begin{array}{c}
+	T_{EV}\\
+	\psi_v 
+	\end{array}
+	\right]\\
+	\text{Input:}&& \nonumber \\
+	u &=& \left[
+	\begin{array}{c}
+	e_L\\
+	e_R 
+	\end{array}
+	\right]\\
+	\text{State Space:}&& \nonumber\\
+	\dot{x} &=& Ax+Bu\\
+	y &=& Cx\\
+	\nonumber \\
+	\dot{x} &=& \left[
+	\begin{array}{c}
+	\dot{T}_{EV}\\
+	\dot{\psi}_v 
+	\end{array}
+	\right] \nonumber \\
+	&=& \left[
+	\begin{array}{c}
+	\cos(\psi_v)\cdot u_v\\
+	\sin(\psi_v)\cdot u_v\\
+	\omega_v 
+	\end{array}
+	\right] \nonumber\\
+	\nonumber \\
+	\nonumber \\
+	let, \left[
+	\begin{array}{c}
+	\cos(\psi_v)\\
+	\sin(\psi_v) 
+	\end{array}
+	\right] &=& \left[
+	\begin{array}{c}
+	1\\
+	0
+	\end{array}
+	\right] \nonumber \\
+	\nonumber \\
+	\nonumber \\
+	\dot{x} &=& \left[
+	\begin{array}{c}
+	1\cdot u_v\\
+	0\\
+	\omega_v 
+	\end{array}
+	\right] \nonumber \\
+	&=& \left[
+	\begin{array}{c}
+	\frac{\pi}{N\cdot T}(R_L\cdot e_L + R_R\cdot e_R)\\
+	0\\
+	\frac{2\pi}{N \cdot L\cdot T}(R_L \cdot e_L - R_R \cdot e_R) 
+	\end{array}
+	\right] \\
+	\nonumber \\
+	y &=& \left[
+	\begin{array}{c}
+	T_{EV} 
+	\end{array}
+	\right]\\
+	\nonumber \\
+	\text{Matrix Form:} && \nonumber\\
+	A &=& \left[
+	\begin{array}{ccc}
+	0&0&0\\
+	0&0&0\\
+	0&0&0\\
+	\end{array}
+	\right]\\	
+	\text{This looks incorrect.}&&\text{Why would A be all zeros?}\nonumber \\
+	B &=& \left[
+	\begin{array}{cc}
+	\frac{\pi\cdot R_L}{N\cdot T}&\frac{\pi\cdot R_R}{N\cdot T}\\
+	0&0\\
+	\frac{2\pi\cdot R_L}{N \cdot L\cdot T}&\frac{-2\pi\cdot R_R}{N \cdot L\cdot T}\\
+	\end{array}
+	\right]\\
+	C &=& \left[
+	\begin{array}{ccc}
+	1&1&0\\
+	\end{array}
+	\right]\\	
+	\nonumber \end{eqnarray}
+	
 	 
 \end{document}
